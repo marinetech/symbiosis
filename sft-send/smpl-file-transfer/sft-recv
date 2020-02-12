@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#set -x
+#stty raw
+while 
+	$(sed -ne 's/.*SIMPLE-FILE-TRANSFER|\([^|]*\)|\([0-9]*\)$/export FILENAME=\1 FILESIZE=\2/;tz;b;:z;p;q')
+	[ -z "$FILENAME" ] && break
+	dd of=$FILENAME count=$FILESIZE ibs=1 && echo "find and save $FILENAME, $FILESIZE bytes" 1>&2
+	#cat
+do
+	unset FILENAME
+done
+
+

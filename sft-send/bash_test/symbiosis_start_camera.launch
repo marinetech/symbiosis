@@ -1,0 +1,37 @@
+<launch>
+    <arg name="nodelet_manager_name" value="nodelet_manager" />
+    <arg name="camera_name_rovio" value="camera" />
+
+    <!-- 1st image_proc: stereo/left => color -->
+    <node name="image_proc" pkg="image_proc" type="image_proc" ns="/stereo/left/"/>
+
+    <!-- Image resizing -->
+    <node pkg="nodelet" type="nodelet" args="standalone image_proc/resize" name="resize_img">
+      <!-- remap input topics -->
+      <remap from="image" to="/stereo/left/image_color"/>
+      <!-- <remap from="resize_img/image" to="/$(arg camera_name_rovio)/image_raw"/> -->
+      <remap from="resize_img/image" to="/camera/image_raw"/>
+    </node>
+
+    <!-- 2nd image_proc: stereo/left => color -->
+    <!-- output is /stereo/left/image_mono -->
+    <node name="image_proc" pkg="image_proc" type="image_proc" ns="camera">
+      <!-- final output: /camera/image_mono -->
+      <!-- <remap from="image" to="/stereo/left/image_color"/> -->
+    </node>
+
+
+
+  <!-- Dynamic reconfigure the resizing nodelet -->
+  <node name="$(anon dynparam)" pkg="dynamic_reconfigure" type="dynparam" args="set_from_parameters resize_img">
+    <param name="use_scale" type="int" value="0" />
+    <param name="width" type="int" value="678" />
+    <param name="height" type="int" value="876" />
+  </node>
+
+
+
+
+
+
+</launch>

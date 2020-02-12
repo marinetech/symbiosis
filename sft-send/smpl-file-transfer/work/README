@@ -1,0 +1,29 @@
+Тестирование:
+
+make sft-recv-c && (echo aaaa; ./sft-send ../xchg.c | head; ./sft-send ~/theodor_bastard_pustota-Bs8-cuj7KCE.flv ; echo b; ./sft-send ~/theodor_bastard_selva-iMDp6vtaqKU.flv ) | ./sft-recv-c
+
+1. вот тут сначало сшелся мусор                                 
+2. шлется обрезаный файл                                        
+3. шлется еще один файл                                         
+4. шлется мусор                                                 
+5. шлется еще один файл                                         
+                                                                
+вот вывод                                                       
+                                                                
+drop 5 bytes                                                    
+start receive filename: xchg.c, size 449                        
+can't reveive 321 bytes for file                                
+start receive filename: theodor_bastard_pustota-Bs8-cuj7KCE.flv, size 9519909
+file done                                                       
+drop 2 bytes                                                    
+start receive filename: theodor_bastard_selva-iMDp6vtaqKU.flv, size 13162322
+file done      
+
+
+
+1. rm -f server-pipe; mkfifo server-pipe ; cat server-pipe | while :; do nc -v -q 1 -l -p 1234; done | tee /dev/stderr | sh > server-pipe
+
+2.  rm -f client-pipe; mkfifo client-pipe; while :; do cat client-pipe; done | tee /dev/stderr | nc -v 192.168.0.172 1234 | ~/tests/smpl-file-transfer/st-recv-c
+
+3. echo /usr/local/bin/st-send /etc/inittab > client-pipe 
+

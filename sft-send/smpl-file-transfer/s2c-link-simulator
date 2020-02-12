@@ -1,0 +1,5 @@
+#!/bin/bash
+
+socat -d -d -d PTY,link=s2c-chan,raw,echo=0 tcp-listen:9200,bind=127.127.0.1,fork,reuseaddr &
+sleep 1
+socat -d -d -d open:s2c-chan tcp-listen:9200,bind=127.127.0.2,fork,reuseaddr 

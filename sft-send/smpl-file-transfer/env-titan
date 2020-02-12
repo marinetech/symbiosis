@@ -1,0 +1,1 @@
+export PATH=/opt/arcom/bin:/opt/arcom/arm-linux/bin/:$PATH
