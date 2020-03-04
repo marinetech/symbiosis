@@ -6,11 +6,11 @@ import RPi.GPIO as GPIO
 
 up_relays = ['27', '22', '10', '9']
 down_relays = ['23', '24', '25', '17']
-ops = ['up', "down", "off"]
+ops = ['up', "down", "off", "state"]
 
 def show_usage_and_exit():
     print("Usage:")
-    print("\t" + sys.argv[0] + " [up | down | off]")
+    print("\t" + sys.argv[0] + " [up | down | off | state]")
     exit()
 
 def init_gpio():
@@ -43,6 +43,13 @@ def parse_args():
 
     return req_op
 
+def show_current_state():
+    if GPIO.input(int(up_relays[0])) and  GPIO.input(int(down_relays[0])):
+        print("both relays are off")
+    elif GPIO.input(int(up_relays[0])):
+        print("down camera is on")
+    else:
+        print("up camera is on")
 
 #------------------- Main Body ------------------#
 
@@ -56,6 +63,8 @@ if req_op == "off":
         GPIO.output(int(relay), GPIO.HIGH)
     for relay in down_relays:
         GPIO.output(int(relay), GPIO.HIGH)
+elif req_op == "state":
+    show_current_state()
 elif req_op == "up":
     for relay in down_relays:
         GPIO.output(int(relay), GPIO.HIGH)
